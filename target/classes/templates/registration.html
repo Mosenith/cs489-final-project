@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Food Online</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-4">Register</h1>
+    <img th:src="@{/images/taco-cloud.png}" class="img-fluid" alt="Taco Cloud Logo" width="250" height="200">
+
+    <form method="POST" th:action="@{/register}" id="registerForm">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputUsername">Username</label>
+                <input type="text" class="form-control" id="inputUsername" name="username" placeholder="Username">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputPassword">Password</label>
+                <input type="password" class="form-control" id="inputPassword" name="password" placeholder="Password">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputConfirmPassword">Confirm password</label>
+            <input type="password" class="form-control" id="inputConfirmPassword" name="confirm" placeholder="Confirm Password">
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputFullName">Full name</label>
+                <input type="text" class="form-control" id="inputFullName" name="fullName" placeholder="Full Name">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputPhone">Phone</label>
+                <input type="text" class="form-control" id="inputPhone" name="phone" placeholder="Phone">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputAddress">Street</label>
+            <input type="text" class="form-control" id="inputAddress" name="street" placeholder="1234 Main St">
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputCity">City</label>
+                <input type="text" class="form-control" id="inputCity" name="city">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="inputState">State</label>
+                <input type="text" class="form-control" id="inputState" name="state">
+            </div>
+            <div class="form-group col-md-2">
+                <label for="inputZip">Zip</label>
+                <input type="text" class="form-control" id="inputZip" name="zip">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputRole">Role</label><br>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="role" id="userRole" value="USER" checked>
+                <label class="form-check-label" for="userRole">User</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="role" id="adminRole" value="ADMIN">
+                <label class="form-check-label" for="adminRole">Admin</label>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        button {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button {
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button:last-child {
+            background-color: #ff5722;
+        }
+
+        button:last-child:hover {
+            background-color: #e64a19;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Login</h2>
+    <form id="loginForm" onsubmit="login(event)">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit" name="action" value="login">Login</button>
+        <button type="button" onclick="register()">Register</button>
+        <button type="submit" name="action" value="testLogin">Login As Admin</button>
+    </form>
+</div>
+
+<script>
+    async function login(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Get username and password from form
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        // Create authentication request object
+        const authenticationRequest = {
+            username: username,
+            password: password
+        };
+
+        try {
+            // Send POST request to /api/auth/login
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(authenticationRequest)
+            });
+
+            // // Parse JSON response
+            const data = await response.json();
+
+            // Check if authentication was successful
+            if (response.ok) {
+                console.log("Login OKKKK!!!!!")
+
+                // Save JWT token to local storage
+                // localStorage.setItem('jwt', data.token);
+
+                // Redirect user to dashboard or another page
+                if (event.submitter.value === 'login') {
+                    window.location.href = 'http://localhost:8080/design?token=' + data.token;
+                } else if (event.submitter.value === 'testLogin') {
+                    console.log("Rout to Test Auth!");
+
+                    // Include JWT token in request header
+                    // const token = localStorage.getItem('jwt');
+                    const testResponse = await fetch('/api/auth/test', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${data.token}`
+                        }
+                    });
+
+                    // Check if the response status is ok (200)
+                    if (testResponse.ok) {
+                        console.log("Rout to testAuth OKK...");
+                        // Get the username from the input field
+                        const username = document.getElementById('username').value;
+                        // Redirect to the testAuth page with the username as a query parameter
+                        window.location.href = `/testAuth?username=${username}`;
+                    } else {
+                        // Handle unauthorized access or other errors
+                        alert('Unauthorized access or an error occurred.');
+                    }
+                }
+            } else {
+                // Handle authentication failure (e.g., display error message)
+                alert('Authentication failed. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again later.');
+        }
+    }
+
+    async function register() {
+        console.log("Rout to Register!");
+        window.location.href = 'http://localhost:8080/register';
+    }
+</script>
+</body>
+</html>

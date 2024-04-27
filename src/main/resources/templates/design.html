@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Food Online</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-gap: 20px;
+    }
+
+    .ingredient-group {
+      background-color: #f9f9f9;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    h3 {
+      color: #555;
+    }
+
+    .custom-control-label {
+      color: #333;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      margin-top: 20px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #totalPrice {
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .center img {
+      width: 400px;
+      height: 250px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Pick Your Food</h1>
+  <div class="center"> <img th:src="@{/images/brunch.jpeg}" alt="Taco">
+  </div>
+<!--    width="250" height="200" />-->
+<!--  <img th:src="@{/images/taco-cloud.png}" width="250" height="200" />-->
+
+  <form id="orderForm" action="design" method="post" th:object="${design}">
+    <div class="grid">
+      <div class="ingredient-group" id="asian">
+        <h3>Asian Cuisine</h3>
+        <div th:each="menu : ${asians}">
+          <div class="custom-control custom-checkbox">
+            <input name="menu" type="checkbox" class="custom-control-input" id="menuAsian" th:value="${menu.id}">
+            <label class="custom-control-label" for="menuAsian" th:text="${menu.name}"></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="ingredient-group" id="fastFoods">
+        <h3>Fast Foods</h3>
+        <div th:each="menu : ${fastFoods}">
+          <div class="custom-control custom-checkbox">
+            <input name="menu" type="checkbox" class="custom-control-input" id="menuFastFood" th:value="${menu.id}">
+            <label class="custom-control-label" for="menuFastFood" th:text="${menu.name}"></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="ingredient-group" id="french">
+        <h3>French Cuisine</h3>
+        <div th:each="menu : ${french}">
+          <div class="custom-control custom-checkbox">
+            <input name="menu" type="checkbox" class="custom-control-input" id="menuFrench" th:value="${menu.id}">
+            <label class="custom-control-label" for="menuFrench" th:text="${menu.name}"></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="ingredient-group" id="italian">
+        <h3>Italian Cuisine</h3>
+        <div th:each="menu : ${italian}">
+          <div class="custom-control custom-checkbox">
+            <input name="menu" type="checkbox" class="custom-control-input" id="menuItalian" th:value="${menu.id}">
+            <label class="custom-control-label" for="menuItalian" th:text="${menu.name}"></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="ingredient-group" id="japanese">
+        <h3>Japanese Cuisine</h3>
+        <div th:each="menu : ${japanese}">
+          <div class="custom-control custom-checkbox">
+            <input name="menu" type="checkbox" class="custom-control-input" id="menuJapanese" th:value="${menu.id}">
+            <label class="custom-control-label" for="menuJapanese" th:text="${menu.name}"></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h3>Total Price: <span id="totalPrice">$0</span></h3>
+      <button type="submit" class="btn btn-primary">Confirm Your Order</button>
+    </div>
+
+    <!-- Add hidden input fields to store checkbox values -->
+    <input type="hidden" name="checkedItems" id="checkedItemsInput" />
+    <input type="hidden" name="totalPrice" id="totalPriceInput" />
+    <input type="hidden" name="token" th:value="${token}" />
+
+  </form>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const totalPriceSpan = document.getElementById('totalPrice');
+
+    const checkedItemsInput = document.getElementById('checkedItemsInput');
+    const totalPriceInput = document.getElementById('totalPriceInput');
+    const orderForm = document.getElementById('orderForm');
+
+    checkboxes.forEach(function (checkbox) {
+      checkbox.addEventListener('change', updateTotalPrice);
+    });
+
+    function updateTotalPrice() {
+      let totalPrice = 0;
+      const checkedItems = [];
+
+      checkboxes.forEach(function (cb) {
+        if (cb.checked) {
+          totalPrice += 10; // Assuming each checkbox adds $10 to the total price
+          checkedItems.push(cb.value);
+        }
+      });
+      totalPriceSpan.textContent = '$' + totalPrice;
+      checkedItemsInput.value = checkedItems.join(',');
+      totalPriceInput.value = totalPrice;
+    }
+
+    orderForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+      // Call the function to update the total price before submitting the form
+      updateTotalPrice();
+
+      // Submit the form using fetch API
+      fetch('/design', {
+        method: 'POST',
+        body: new FormData(orderForm),
+      })
+              .then(response => {
+                // Handle response if needed
+                console.log('Form submitted successfully');
+                window.location.href = "/orders/current";
+              })
+              .catch(error => {
+                console.error('Error submitting form:', error);
+              });
+    });
+  });
+</script>
+</body>
+</html>

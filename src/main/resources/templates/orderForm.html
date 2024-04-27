@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Food Online</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+            width: 400px;
+            height: 250px;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        form > div {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .validationError {
+            color: red;
+            display: none;
+            margin-top: 5px;
+        }
+
+        input[type="submit"],
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover,
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Order Your Food!</h1>
+
+    <img th:src="@{/images/brunch.jpeg}" alt="Taco"/>
+
+    <a th:href="@{/design}" id="another">Choose another food...</a>
+
+    <form method="POST" th:action="@{/orders}" th:object="${order}">
+        <div>
+            <h3>Deliver my masterpieces to...</h3>
+            <label for="name">Name: </label>
+            <input type="text" th:field="*{name}" id="name" onblur="checkEmptyField('name', 'nameError')"/>
+            <p id="nameError" class="validationError">Name Error</p>
+        </div>
+
+        <div>
+            <label for="street">Street address: </label>
+            <input type="text" th:field="*{street}" id="street" onblur="checkEmptyField('street', 'streetError')"/>
+            <p id="streetError" class="validationError">Street Error</p>
+        </div>
+
+        <div>
+            <label for="city">City: </label>
+            <input type="text" th:field="*{city}" id="city" onblur="checkEmptyField('city', 'cityError')"/>
+            <p id="cityError" class="validationError">City Error</p>
+        </div>
+
+        <div>
+            <label for="state">State: </label>
+            <input type="text" th:field="*{state}" id="state" onblur="checkEmptyField('state', 'stateError')"/>
+            <p id="stateError" class="validationError">State Error</p>
+        </div>
+
+        <div>
+            <label for="zip">Zip code: </label>
+            <input type="text" th:field="*{zip}" id="zip" onblur="checkEmptyField('zip', 'zipError')"/>
+            <p id="zipError" class="validationError">Zip Error</p>
+        </div>
+
+        <div>
+            <h3>Here's how I'll pay...</h3>
+            <label for="ccNumber">Credit Card #: </label>
+            <input type="text" th:field="*{ccNumber}" id="ccNumber" onblur="checkEmptyField('ccNumber', 'ccNumberError')"/>
+            <p id="ccNumberError" class="validationError">CC Num Error</p>
+        </div>
+
+        <div>
+            <label for="ccExpiration">Expiration: </label>
+            <input type="text" th:field="*{ccExpiration}" id="ccExpiration" onblur="checkEmptyField('ccExpiration', 'ccExpirationError')"/>
+            <p id="ccExpirationError" class="validationError">ccExpiration Error</p>
+        </div>
+
+        <div>
+            <label for="ccCVV">CVV: </label>
+            <input type="text" th:field="*{ccCVV}" id="ccCVV" onblur="checkEmptyField('ccCVV', 'ccCVVError')"/>
+            <p id="ccCVVError" class="validationError">ccCVV Error</p>
+        </div>
+
+        <div th:if="${#fields.hasAnyErrors()}">
+            <p class="validationError">
+                Please correct the error and resubmit.
+            </p>
+        </div>
+
+        <input type="submit" value="Submit Order"/>
+        <button type="button" onclick="window.location.href='/design'">Cancel</button>
+    </form>
+</div>
+
+<script>
+    function checkEmptyField(fieldId, errorId) {
+        const field = document.getElementById(fieldId);
+        const errorElement = document.getElementById(errorId);
+        if (field.value.trim() === "") {
+            errorElement.style.display = "block";
+        } else {
+            errorElement.style.display = "none";
+        }
+    }
+</script>
+</body>
+</html>

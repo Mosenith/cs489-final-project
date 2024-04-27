@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+</head>
+<body>
+<h1>Welcome to the Test Authentication Page!</h1>
+<p id="usernameDisplay"></p>
+
+<button onclick="showUser()">Show User</button>
+<button onclick="showOrderHistory()">Order History</button>
+<script>
+    // Function to get the value of a query parameter from the URL
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, '\\$&');
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+
+    // Get the username from the URL
+    var username = getParameterByName('username');
+    // Display the username on the page
+    document.getElementById('usernameDisplay').textContent = 'Welcome, ' + username + '!';
+
+    function showUser() {
+        // Route to the URL for showing user details
+        window.location.href = '/admin/users';
+    }
+
+    function showOrderHistory() {
+        // Route to the URL for showing order history
+        window.location.href = '/admin/orderRecords';
+    }
+</script>
+</body>
+</html>
