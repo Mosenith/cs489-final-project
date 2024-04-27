@@ -116,7 +116,7 @@
 
                 // Redirect user to dashboard or another page
                 if (event.submitter.value === 'login') {
-                    window.location.href = 'http://localhost:8080/design?token=' + data.token;
+                    window.location.href = 'https://foodonlineapplication.azurewebsites.net/design?token=' + data.token;
                 } else if (event.submitter.value === 'testLogin') {
                     console.log("Rout to Test Auth!");
 
@@ -153,7 +153,7 @@
 
     async function register() {
         console.log("Rout to Register!");
-        window.location.href = 'http://localhost:8080/register';
+        window.location.href = 'https://foodonlineapplication.azurewebsites.net/register';
     }
 </script>
 </body>
