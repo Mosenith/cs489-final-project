@@ -32,7 +32,7 @@ public class AuthController {
     private CustomUserService userService;
 
     @PostMapping("/api/auth/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody AuthenticationRequest authenticationRequest) {
+    public String authenticateUser(@RequestBody AuthenticationRequest authenticationRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -49,7 +49,8 @@ public class AuthController {
         userService.saveToken(authenticationRequest.getUsername(), jwtToken);
 
         System.out.println("Post Token ==> " + jwtToken);
-        return ResponseEntity.ok(new AuthenticationResponse(jwtToken));
+//        return ResponseEntity.ok(new AuthenticationResponse(jwtToken));
+        return "design";
     }
 
     @GetMapping("/api/auth/login") // Mapping to serve login.html
